@@ -46,15 +46,29 @@ def main(image_filename):
     od_model = TFObjectDetection(graph_def, labels)
 
     image = Image.open(image_filename)
-    image.save('../test/image_resized2.jpg')
+
     predictions = od_model.predict_image(image)
     for p in predictions:
         print(f"probability = {p.get('probability')} tagName = {p.get('tagName')}")
 
+def predict_image(img):
+    # Load a TensorFlow model
+    graph_def = tf.compat.v1.GraphDef()
+    with tf.io.gfile.GFile(MODEL_FILENAME, 'rb') as f:
+        graph_def.ParseFromString(f.read())
+        # Load labels
+    with open(LABELS_FILENAME, 'r') as f:
+        labels = [l.strip() for l in f.readlines()]
+
+    od_model = TFObjectDetection(graph_def, labels)
+    predictions = od_model.predict_image(img)
+
+    return predictions
 
 if __name__ == '__main__':
     print(sys.argv)
-    main('../test/image2020-02-18 00_20_52.210706.jpg')
+    path = './test/image2020-02-18 00_20_52.210706.jpg' 
+    
     # if len(sys.argv) <= 1:
     #     print('USAGE: {} image_filename'.format(sys.argv[0]))
     # else:

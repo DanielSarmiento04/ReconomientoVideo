@@ -1,8 +1,6 @@
 from __future__ import division
 from models import *
 from predict import predict_image
-from utils.utils import *
-from utils.datasets import *
 import os
 import sys
 import argparse
@@ -12,7 +10,7 @@ import torch
 from torch.autograd import Variable
 import predict
 import numpy as np
-
+from util.utils import  *
 
 def Convertir_RGB(img):
     # Convertir Blue, green, red a Red, green, blue
@@ -77,7 +75,7 @@ if __name__ == "__main__":
             break
     
         # Display the resulting frame
-        cv2.imshow('frame', frame)
+        cv2.imshow('frameSon', frame)
         #Save frame without information
         out.write(frame)
 
@@ -87,8 +85,15 @@ if __name__ == "__main__":
         detections = predict.predict_image(imgTensor)
         for detection in detections:
             if detection is not None:
+                print(detection)
+                boundig_boxes = detection.get('boundingBox')
+                listvalues = boundig_boxes.values()
+                startPoint = (int(boundig_boxes['left']*800), int( boundig_boxes['top']*620))
+                endPoint = (int((boundig_boxes['left'] + boundig_boxes['width'])*800), int((boundig_boxes['top']-boundig_boxes['height'])*620))
+                frame = cv2.rectangle(frame, startPoint, endPoint, (0, 255, 0), 5)
+                cv2.putText(frame, detection.get('tagName'), startPoint, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                cv2.imshow('frame', frame)
                 
-                detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
 
 
         # the 'q' button is set as the

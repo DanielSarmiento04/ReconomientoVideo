@@ -79,7 +79,7 @@ if __name__ == "__main__":
         #Save frame without information
         out.write(frame)
 
-        RGBimg = Convertir_RGB(frame)
+        # RGBimg = Convertir_RGB(frame)
         # Convert to image to process in the model
         imgTensor = Image.fromarray(frame)
         detections = predict.predict_image(imgTensor)
@@ -87,13 +87,19 @@ if __name__ == "__main__":
             if detection is not None:
                 print(detection)
                 boundig_boxes = detection.get('boundingBox')
-                listvalues = boundig_boxes.values()
-                startPoint = (int(boundig_boxes['left']*800), int( boundig_boxes['top']*620))
-                endPoint = (int((boundig_boxes['left'] + boundig_boxes['width'])*800), int((boundig_boxes['top']-boundig_boxes['height'])*620))
-                frame = cv2.rectangle(frame, startPoint, endPoint, (0, 255, 0), 5)
-                cv2.putText(frame, detection.get('tagName'), startPoint, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                cv2.imshow('frame', frame)
+                x1, y1, w, h = boundig_boxes.values()
                 
+                y1 *= imgTensor.height
+                x1 *= imgTensor.width
+                w *= imgTensor.width
+                h *= imgTensor.height
+
+                x2 = x1 + w
+                y2 = y1 + h                
+
+                frame = cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), [0, 255, 0], 5)
+                cv2.putText(frame, detection.get('tagName'), (int(x1), int(y1)), cv2.FONT_HERSHEY_SIMPLEX, 1, [228, 54, 16], 5) #Nombre de la clase
+                cv2.imshow('frame', frame)
 
 
         # the 'q' button is set as the

@@ -15,3 +15,17 @@ def load_classes(path):
     fp = open(path, "r")
     names = fp.read().split("\n")[:-1]
     return names
+
+def crop_frame(frame, x, y, w, h):
+    """
+    Crop the frame
+    """
+    return frame[y:y+h, x:x+w]
+
+def get_main__object_detection(detection):
+    """
+    Get the main object detection
+    """
+    mainDetection = []
+    
+    

@@ -1,5 +1,4 @@
 from __future__ import division
-from models import *
 from predict import predict_image
 import os
 import sys
@@ -11,29 +10,6 @@ from torch.autograd import Variable
 import predict
 import numpy as np
 from util.utils import  *
-
-def Convertir_RGB(img):
-    # Convertir Blue, green, red a Red, green, blue
-    b = img[:, :, 0].copy()
-    g = img[:, :, 1].copy()
-    r = img[:, :, 2].copy()
-    img[:, :, 0] = r
-    img[:, :, 1] = g
-    img[:, :, 2] = b
-    return img
-
-
-def Convertir_BGR(img):
-    # Convertir red, blue, green a Blue, green, red
-    r = img[:, :, 0].copy()
-    g = img[:, :, 1].copy()
-    b = img[:, :, 2].copy()
-    img[:, :, 0] = b
-    img[:, :, 1] = g
-    img[:, :, 2] = r
-    return img
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -65,7 +41,7 @@ if __name__ == "__main__":
     #Assign a color for each classes
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     #load Tensor
-    Tensor = torch.cuda.FloatTensor if isThereGraphicCard else torch.FloatTensor
+    # Tensor = torch.cuda.FloatTensor if isThereGraphicCard else torch.FloatTensor
 
     while(True):
         # Capture the video frame

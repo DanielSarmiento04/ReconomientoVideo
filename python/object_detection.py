@@ -147,6 +147,7 @@ class ObjectDetection(object):
     def predict_image(self, image):
         inputs = self.preprocess(image)
         prediction_outputs = self.predict(inputs)
+        # boxes, class_probs = self._extract_bb(prediction_outputs, self.anchors)
         return self.postprocess(prediction_outputs)
 
     def preprocess(self, image):

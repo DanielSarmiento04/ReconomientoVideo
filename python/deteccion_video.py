@@ -83,6 +83,7 @@ if __name__ == "__main__":
         # Convert to image to process in the model
         imgTensor = Image.fromarray(frame)
         detections = predict.predict_image(imgTensor)
+        detections  = get_main__label_detection(detections, classes)
         for detection in detections:
             if detection is not None:
                 print(detection)

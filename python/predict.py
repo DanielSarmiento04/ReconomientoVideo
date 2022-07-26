@@ -17,8 +17,8 @@ LABELS_FILENAME = '../labels.txt'
 class TFObjectDetection(ObjectDetection):
     """Object Detection class for TensorFlow"""
 
-    def __init__(self, graph_def, labels):
-        super(TFObjectDetection, self).__init__(labels)
+    def __init__(self, graph_def, labels, threshold=0.3):
+        super(TFObjectDetection, self).__init__(labels, prob_threshold=threshold)
         self.graph = tf.compat.v1.Graph()
         with self.graph.as_default():
             input_data = tf.compat.v1.placeholder(tf.float32, [1, None, None, 3], name='Placeholder')
@@ -53,6 +53,7 @@ def main(image_filename):
 
 def predict_image(img):
     # Load a TensorFlow model
+    
     graph_def = tf.compat.v1.GraphDef()
     with tf.io.gfile.GFile(MODEL_FILENAME, 'rb') as f:
         graph_def.ParseFromString(f.read())

@@ -10,6 +10,7 @@ from torch.autograd import Variable
 import predict
 import numpy as np
 from util.utils import  *
+import tensorflow as tf
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -33,11 +34,12 @@ if __name__ == "__main__":
 
     # Crear a video without labels
     out = cv2.VideoWriter('./videos/SinRecuadro.mp4', 0, 60.0, (800, 620))
-
+    outPut = cv2.VideoWriter('./videos/ConCuadro.mp4', 0, 60.0, (800, 620))
     # define a video capture object
     vid = cv2.VideoCapture(0)
     # Define the label classes detections
     classes = load_classes(opt.class_path)
+    
     #Assign a color for each classes
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     #load Tensor
@@ -76,6 +78,7 @@ if __name__ == "__main__":
 
                 frame = cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), [0, 255, 0], 5)
                 cv2.putText(frame, detection.get('tagName'), (int(x1), int(y1)), cv2.FONT_HERSHEY_SIMPLEX, 1, [228, 54, 16], 5) #Nombre de la clase
+                outPut.write(frame)
                 cv2.imshow('frame', frame)
 
 

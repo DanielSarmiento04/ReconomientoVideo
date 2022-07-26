@@ -27,10 +27,10 @@ def get_main__label_detection(detections, classes):
     """
     Get the main object detection
     """
-    clasesCopy = classes.copy()
+
     mainDetection = []
     for detection in detections:
         if detection is not None and detection.get('probability') > 0.3: #and detection.get('tagName') in clasesCopy 
             mainDetection.append(detection)
-            clasesCopy.remove(detection.get('tagName'))
+            # clasesCopy.remove(detection.get('tagName'))
     return mainDetection

@@ -17,8 +17,8 @@ LABELS_FILENAME = '../labels.txt'
 class TFObjectDetection(ObjectDetection):
     """Object Detection class for TensorFlow"""
 
-    def __init__(self, graph_def, labels, threshold=0.3):
-        super(TFObjectDetection, self).__init__(labels, prob_threshold=threshold)
+    def __init__(self, graph_def, labels):
+        super(TFObjectDetection, self).__init__(labels)
         self.graph = tf.compat.v1.Graph()
         with self.graph.as_default():
             input_data = tf.compat.v1.placeholder(tf.float32, [1, None, None, 3], name='Placeholder')

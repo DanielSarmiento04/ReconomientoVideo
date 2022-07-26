@@ -28,15 +28,24 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
     opt = parser.parse_args() #load (arg)
     
+
     isThereGraphicCard = torch.cuda.is_available()
 
     device = torch.device("cuda" if isThereGraphicCard else "cpu")
 
-    # Crear a video without labels
-    out = cv2.VideoWriter('./videos/SinRecuadro.mp4', 0, 60.0, (800, 620))
-    outPut = cv2.VideoWriter('./videos/ConCuadro.mp4', 0, 60.0, (800, 620))
     # define a video capture object
-    vid = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)
+
+    heightVideo, widthVideo = (int(cap.get(4)),int(cap.get(3)))
+    sizeVideo = (widthVideo, heightVideo)
+    # Define the quantity of frames to be captured per second
+    fps = 30.0
+
+    # Crear a video without labels
+    out = cv2.VideoWriter('./videos/SinRecuadro.avi',cv2.VideoWriter_fourcc(*'MJPG') , fps, sizeVideo)
+    
+    outPut = cv2.VideoWriter('./videos/ConCuadro.avi', cv2.VideoWriter_fourcc(*'MJPG'), fps, sizeVideo)
+    
     # Define the label classes detections
     classes = load_classes(opt.class_path)
     
@@ -48,12 +57,10 @@ if __name__ == "__main__":
     while(True):
         # Capture the video frame
         # by frame
-        ret, frame = vid.read()
+        ret, frame = cap.read()
         if ret is False:  # If the fram is avaible
             break
-    
-        # Display the resulting frame
-        cv2.imshow('frameSon', frame)
+   
         #Save frame without information
         out.write(frame)
 
@@ -89,8 +96,9 @@ if __name__ == "__main__":
             break
 
     # After the loop release the cap object
-    vid.release()
+    cap.release()
     out.release()
+    outPut.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
    
